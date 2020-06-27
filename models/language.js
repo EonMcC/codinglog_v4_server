@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
 const User = require("./user");
+const db = require("./index");
 
 const languageSchema = new mongoose.Schema({
   text: {
     type: String,
     required: false,
-    maxLenght: 40
+    maxLenght: 40,
   },
   totalTime: {
-    type: Number
+    type: Number,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  }
+    ref: "User",
+  },
 });
 
-languageSchema.pre("remove", async function(next) {
+languageSchema.pre("remove", async function (next) {
   try {
-    let user = await User.findById(this.user);
+    let user = await db.User.findById(this.user);
     user.languages.remove(this.id);
     await user.save();
     return next();

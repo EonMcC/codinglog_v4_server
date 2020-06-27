@@ -1,11 +1,11 @@
 const db = require("../models");
 
-exports.createLanguage = async function(req, res, next) {
+exports.createLanguage = async function (req, res, next) {
   try {
     let language = await db.Language.create({
       text: req.body.text,
       totalTime: req.body.totalTime,
-      user: req.params.id
+      user: req.params.id,
     });
     let foundUser = await db.User.findById(req.params.id);
     foundUser.languages.push(language.id);
@@ -13,7 +13,7 @@ exports.createLanguage = async function(req, res, next) {
     let foundLanguage = await db.Language.findById(language._id).populate(
       "user",
       {
-        username: true
+        username: true,
       }
     );
     return res.status(200).json(foundLanguage);
@@ -22,7 +22,7 @@ exports.createLanguage = async function(req, res, next) {
   }
 };
 
-exports.removeLanguage = async function(req, res, next) {
+exports.removeLanguage = async function (req, res, next) {
   try {
     let foundLanguage = await db.Language.findById(req.params.language_id);
     await foundLanguage.remove();
@@ -32,7 +32,7 @@ exports.removeLanguage = async function(req, res, next) {
   }
 };
 
-exports.getLanguages = async function(req, res, next) {
+exports.getLanguages = async function (req, res, next) {
   try {
     let foundUser = await db.User.findById(req.params.id);
     let userId = foundUser._id;
@@ -43,7 +43,7 @@ exports.getLanguages = async function(req, res, next) {
   }
 };
 
-exports.updateLanguageTime = async function(req, res, next) {
+exports.updateLanguageTime = async function (req, res, next) {
   try {
     let languageID = req.params.language_id;
     let totalTime = req.body.totalTime;
